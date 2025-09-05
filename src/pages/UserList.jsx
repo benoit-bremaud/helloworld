@@ -1,7 +1,23 @@
+import { useEffect, useState } from 'react';
+
 import { Link } from 'react-router-dom';
-import users from '../data/users.json';
+import axios from 'axios';
 
 function UserList() {
+    const url = "http://localhost:5000/users/"
+    const [users, setUsers] = useState([])
+
+    useEffect(() => {
+        (async () => {
+            try {
+                const response = await axios.get(url);
+                setUsers(response.data);
+            } catch (error) {
+                console.error("Error fetching users:", error);
+            }
+        })();
+    }, []);
+
     return (
         <div>
             {users.map((user) => (
