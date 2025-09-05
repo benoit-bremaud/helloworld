@@ -1,20 +1,24 @@
 import {useEffect, useState} from "react";
 
+import axios from "axios";
 import {useParams} from "react-router-dom";
-import users from '../data/users.json';
 
 function User() {
-    let { id } = useParams();
-
+    const { id } = useParams();
     const [user, setUser] = useState();
 
-    useEffect (() => {
-        setUser(
-            users.find(
-                (u) => u.id === parseInt(id)
-            )
-        );
+    useEffect(() => {
+        (async () => {
+            const url = `http://localhost:5000/users/${id}`;
+            try {
+                const response = await axios.get(url);
+                setUser(response.data);
+            } catch (error) {
+                console.error("Error fetching users:", error);
+            }
+        })();
     }, [id]);
+
 
     if (!user) {
         return <div>Loading...</div>;
